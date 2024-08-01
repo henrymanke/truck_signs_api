@@ -28,24 +28,26 @@ Hier ist die angepasste und optimierte Reihenfolge:
 
 3. **PostgreSQL-Container starten**:
    ```bash
-   docker run -d --name truck-signs-db --network truck-signs-net \
-     -e POSTGRES_DB=trucksigns \
-     -e POSTGRES_USER=user \
-     -e POSTGRES_PASSWORD=supertrucksignsuser! \
-     -p 5432:5432 postgres:13
+    docker run -d --name truck-signs-db --network truck-signs-net \
+        --env-file ./truck_signs_designs/settings/.env \
+        -v db_data:/var/lib/postgresql/data \
+        -p 5432:5432 postgres:13
    ```
 
 4. **Webanwendung-Container starten**:
-   ```bash
-   docker run -d --name truck-signs-web --network truck-signs-net \
-     -p 8020:8000 --env-file ./truck_signs_designs/settings/.env \
-     truck-signs-app
-   ```
+    ```bash
+        docker run -d --name truck-signs-web --network truck-signs-net \
+            --env-file ./truck_signs_designs/settings/.env \
+            -p 8020:8000 truck-signs-app
+    ```
 
 
 5. **Interaktive Console**:
+```bash
 docker exec -it truck-signs-web /bin/bash
-
+python3 manage.py createsuperuser
+# django < 3.0? -> You can also create Superuser via .env
+```
 ### Weitere Hinweise
 
 1. **Warten auf Datenbankstart**: Der Webcontainer sollte warten, bis die Datenbank vollständig bereit ist. Dies wird im `entrypoint.sh`-Skript sichergestellt, das prüft, ob der Datenbankdienst verfügbar ist, bevor es mit den Migrations- und Startbefehlen fortfährt.
@@ -57,7 +59,7 @@ docker exec -it truck-signs-web /bin/bash
      -e POSTGRES_DB=trucksigns \
      -e POSTGRES_USER=user \
      -e POSTGRES_PASSWORD=supertrucksignsuser! \
-     -v pgdata:/var/lib/postgresql/data \
+     -v db_data:/var/lib/postgresql/data \
      -p 5432:5432 postgres:13
    ```
 

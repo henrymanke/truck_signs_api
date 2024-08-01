@@ -2,19 +2,19 @@
 set -e
 
 # Debugging-Ausgaben für Umgebungsvariablen
-echo "DB_HOST: ${DB_HOST:-'not set'}"
-echo "DB_PORT: ${DB_PORT:-'not set'}"
+echo "POSTGRES_HOST: ${POSTGRES_HOST:-'not set'}"
+echo "POSTGRES_PORT: ${POSTGRES_PORT:-'not set'}"
 
 # Standardwerte setzen, falls Umgebungsvariablen nicht gesetzt sind
-DB_HOST=${DB_HOST:-"truck-signs-db"}
-DB_PORT=${DB_PORT:-5432}
+POSTGRES_HOST=${POSTGRES_HOST:-"truck-signs-db"}
+POSTGRES_PORT=${POSTGRES_PORT:-5432}
 
 # Verwenden der Umgebungsvariablen im Skript
-echo "Connecting to database at $DB_HOST:$DB_PORT..."
+echo "Connecting to database at $POSTGRES_HOST:$POSTGRES_PORT..."
 
 echo "Waiting for postgres to connect ..."
 
-while ! nc -z $DB_HOST $DB_PORT; do
+while ! nc -z $POSTGRES_HOST $POSTGRES_PORT; do
   sleep 1
 done
 

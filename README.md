@@ -32,7 +32,7 @@ The **Truck Signs Api** repository contains the codebase and configurations for 
 3. **Start PostgreSQL Container**:
    ```bash
    docker run -d --name truck-signs-db --network truck-signs-net \
-       --env-file ./path/to/your/.env \
+       --env-file ./truck_signs_designs/settings/.env \
        -v db_data:/var/lib/postgresql/data \
        -p 5432:5432 postgres:13
    ```
@@ -40,7 +40,7 @@ The **Truck Signs Api** repository contains the codebase and configurations for 
 4. **Start the Web Application Container**:
    ```bash
    docker run -d --name truck-signs-web --network truck-signs-net \
-       --env-file .env \
+       --env-file ./truck_signs_designs/settings/.env \
        -p 8020:8000 truck-signs-app
    ```
 

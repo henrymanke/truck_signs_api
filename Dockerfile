@@ -1,7 +1,7 @@
-# Verwende ein offizielles Python-Image als Grundimage
+# Use an official Python image as the base image
 FROM python:3.9-slim
 
-# Installiere Build-Tools und Bibliotheken für die Kompilierung von C-Erweiterungen
+# Install build tools and libraries for compiling C extensions
 RUN apt-get update && apt-get install -y \
     gcc \
     libffi-dev \
@@ -10,20 +10,22 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Setze das Arbeitsverzeichnis im Container
+# Set the working directory in the container
 WORKDIR /app
 
-# Füge die Python-Abhängigkeiten hinzu und installiere sie
+# Add the Python dependencies and install them
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kopiere den Rest der Anwendung in das Arbeitsverzeichnis
+# Copy the rest of the application to the working directory
 COPY . /app
 
-# Führe das Entrypoint-Skript aus
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Expose the port used by the application
+EXPOSE 8020
+
+# Move the entrypoint script to /usr/local/bin/
+RUN mv /app/entrypoint.sh /usr/local/bin/ && chmod +x /usr/local/bin/entrypoint.sh
+
 ENTRYPOINT ["entrypoint.sh"]
 
-# Expose den Port, der von der Anwendung verwendet wird
-EXPOSE 8020
+
